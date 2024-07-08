@@ -12,7 +12,6 @@
 char    *get_next_line(int fd);
 char    *reading(int fd, char *growing_text);
 
-void    ft_free(char *str);
 int     gnl_strlen(char *str);
 char    *gnl_join_buffer(char *text, char *buffer);
 int     gnl_strchr(char *str, int c);
