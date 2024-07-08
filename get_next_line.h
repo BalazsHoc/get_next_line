@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 char    *get_next_line(int fd);
-char    *reading(int fd, char *growing_text, int buffer_size);
+char    *reading(int fd, char *growing_text);
 
 void    ft_free(char *str);
 int     gnl_strlen(char *str);
