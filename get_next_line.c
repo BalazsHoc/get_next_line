@@ -10,20 +10,23 @@ char    *reading(int fd, char *static_buf)
     if (!buffer)
         return (NULL);
     buffer[BUFFER_SIZE] = '\0';
-    return_of_read = 1;
+    return_of_read = read(fd, buffer, BUFFER_SIZE);
+    if (return_of_read == -1)
+        return (ft_free(&buffer), ft_free(&static_buf), NULL);
     while (return_of_read > 0)
     {
-        return_of_read = read(fd, buffer, BUFFER_SIZE);
-        if (return_of_read == -1)
-            return (free(buffer), NULL);
         if (gnl_strchr(buffer, '\n') != -1)
         {
             static_buf = gnl_join_buffer(static_buf, buffer);
-            break ;
+            return (ft_free(&buffer), static_buf);
         }
         static_buf = gnl_join_buffer(static_buf, buffer);
+        printf("%s\n", static_buf);
+        return_of_read = read(fd, buffer, BUFFER_SIZE);
     }
-    free(buffer);
+    if (return_of_read == -1)
+        return (ft_free(&buffer), ft_free(&static_buf), NULL);
+    ft_free(&buffer);
     return (static_buf);
 }
 
@@ -50,7 +53,7 @@ char    *gnl_join_buffer(char *text, char *buffer)
         j++;
     }
     joined[i + j] = '\0';
-    return (free(text), joined);
+    return (ft_free(&text), joined);
 }
 
 char    *get_next_line(int fd)
@@ -70,16 +73,14 @@ char    *get_next_line(int fd)
     if (gnl_strchr(buf, '\n') == -1)
     {
         output = gnl_strlcpy(buf, gnl_strlen(buf) + 1);
-        return (free(buf), output);
+        return (ft_free(&buf), output);
     }
-
     output = gnl_strlcpy(buf, gnl_strchr(buf, '\n'));
     if (!output)
-        return (free(buf), NULL);
+        return (ft_free(&buf), NULL);
     buf = gnl_fromnl(buf);
-    printf("rest: %s\n", buf);
     if (!buf)
-        return (free(output), NULL);
+        return (ft_free(&output), NULL);
     return (output);
 }
 
@@ -90,8 +91,10 @@ int main()
 {
     int fd = open("file.txt", O_RDONLY);
 
-    printf("return: %s\n----------\n", get_next_line(fd));
+    printf("%s\n", get_next_line(fd));
+    printf("%s", get_next_line(fd));
+    printf("%s", get_next_line(fd));
+    printf("%s", get_next_line(fd));
 
-    printf("return: %s", get_next_line(fd));
     return (0);
 }

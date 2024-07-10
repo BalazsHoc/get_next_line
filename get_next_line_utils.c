@@ -1,6 +1,13 @@
 
 #include "get_next_line.h"
 
+void    ft_free(char **str)
+{
+    if (*str)
+        free(*str);
+    *str = NULL;
+}
+
 int  gnl_strlen(char *str)
 {
     int  len;
@@ -54,7 +61,7 @@ char    *gnl_fromnl(char *str)
     start = gnl_strchr(str, '\n') + 1;
     end = gnl_strlen(str) + 1;
     if (start == end)
-        return (free(str), NULL);
+        return (ft_free(&str), NULL);
     line = (char *)malloc(sizeof(char) * (end - start) + 1);
     if (!line)
         return (NULL);
@@ -65,5 +72,5 @@ char    *gnl_fromnl(char *str)
         i++;
     }
     line[start] = '\0';
-    return (free(str), line);
+    return (ft_free(&str), line);
 }

@@ -13,6 +13,7 @@ char    *get_next_line(int fd);
 char    *gnl_join_buffer(char *text, char *buffer);
 char    *reading(int fd, char *growing_text);
 
+void    ft_free(char **str);
 int     gnl_strlen(char *str);
 int     gnl_strchr(char *str, int c);
 char    *gnl_strlcpy(char *str, int len);
