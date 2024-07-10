@@ -10,11 +10,12 @@
 #include <stdlib.h>
 
 char    *get_next_line(int fd);
+char    *gnl_join_buffer(char *text, char *buffer);
 char    *reading(int fd, char *growing_text);
 
 int     gnl_strlen(char *str);
-char    *gnl_join_buffer(char *text, char *buffer);
 int     gnl_strchr(char *str, int c);
-char    *gnl_strdup(char *str, int c);
+char    *gnl_strcpy(char *str, int start, int end);
+
 
 #endif

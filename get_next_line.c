@@ -1,59 +1,87 @@
 
 #include "get_next_line.h"
 
-char    *reading(int fd, char *growing_text)
+char    *reading(int fd, char *static_buf)
 {
-    char    *buffer;
-    int     return_of_read;
+    char        *buffer;
+    ssize_t     return_of_read;
 
     buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (!buffer)
         return (NULL);
-    buffer[BUFFER_SIZE + 1] = '\0';
+    buffer[BUFFER_SIZE] = '\0';
     return_of_read = 1;
     while (return_of_read > 0)
     {
         return_of_read = read(fd, buffer, BUFFER_SIZE);
+        printf("return of read: %zd\n", return_of_read);
         if (return_of_read == -1)
-            return (free(buffer), free(growing_text), NULL);
-        if (gnl_strchr(buffer, '\n') == 1)
+            return (free(buffer), NULL);
+        if (gnl_strchr(buffer, '\n') != -1)
         {
-            growing_text = gnl_join_buffer(growing_text, buffer);
+            static_buf = gnl_join_buffer(static_buf, buffer);
+            printf("after readings buf: %s\n", static_buf);
             break ;
         }
-        growing_text = gnl_join_buffer(growing_text, buffer);
+        static_buf = gnl_join_buffer(static_buf, buffer);
+        printf("readings buf: %s\n", static_buf);
     }
     free(buffer);
-    return (growing_text);
+    return (static_buf);
+}
+
+char    *gnl_join_buffer(char *text, char *buffer)
+{
+    char    *joined;
+    int     i;
+    int     j;
+
+    i = 0;
+    j = 0;
+
+    if (!text)
+        joined = (char *)malloc(sizeof(char) * (gnl_strlen(buffer) + 1));
+    else
+        joined = (char *)malloc(sizeof(char) * (gnl_strlen(text) + gnl_strlen(buffer) + 1));
+    if (!joined)
+        return (NULL);
+    while (text[i++])
+        joined[i] = text[i];
+    while (buffer[j++])
+        joined[i + j] = buffer[j];
+    joined[i + j] = '\0';
+    return (free(text), joined);
 }
 
 char    *get_next_line(int fd)
 {
-    static char     *rest;
-    char            *output_line;
+    static char     *buf;
+    char            *output;
 
     if (fd < 0 || BUFFER_SIZE < 1)
         return (NULL);
-    rest = (char *)malloc(sizeof(char) * 1);
-    if (!rest)
+    buf = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
+    if (!buf)
         return (NULL);
-    rest = reading(fd, rest);
-    if (!rest)
+    printf("we have buffer in gnl\n");
+    buf = reading(fd, buf);
+    if (!buf)
         return (NULL);
-    if (gnl_strchr(rest, '\n') != 0)
+    printf("%s\n", buf);
+    if (gnl_strchr(buf, '\n') == -1)
     {
-           output_line = gnl_strdup(rest, 1);
-            if (!output_line)
-                return (NULL);
+        printf("no newline\n");
+        output = gnl_strcpy(buf, 0, gnl_strlen(buf));
+        return (free(buf), output);
     }
-    else
-    {
-        output_line = gnl_strdup(rest, 2);
-        if (!output_line)
-            return (NULL);
-        return (output_line);
-    }
-    return (output_line);
+    output = gnl_strcpy(buf, 0, gnl_strchr(buf, '\n'));
+    if (!output)
+        return (free(buf), NULL);
+    printf("we have the output line: %s", output);
+    buf = gnl_strcpy(buf, gnl_strchr(buf, '\n'), gnl_strlen(buf));
+    if (!buf)
+        return (free(output), NULL);
+    return (output);
 }
 // #include <stdio.h>
 // #include <fcntl.h>
@@ -61,10 +89,9 @@ char    *get_next_line(int fd)
 // int main()
 // {
 //     char *a;
-//     int fd = open("file.txt", O_RDWR);
-   
+//     int fd = open("file.txt", O_RDONLY);
+//    printf("fd: %d\n", fd);
 //     a = get_next_line(fd);
 //         printf("%s", a);
-//     write(1, "h\n", 2);
-// return (0);
+//     return (0);
 // }
