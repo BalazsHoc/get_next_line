@@ -14,17 +14,17 @@ char    *reading(int fd, char *static_buf)
     while (return_of_read > 0)
     {
         return_of_read = read(fd, buffer, BUFFER_SIZE);
-        printf("return of read: %zd\n", return_of_read);
+        printf("changeable: %s\n", buffer);
         if (return_of_read == -1)
             return (free(buffer), NULL);
         if (gnl_strchr(buffer, '\n') != -1)
         {
             static_buf = gnl_join_buffer(static_buf, buffer);
-            printf("after readings buf: %s\n", static_buf);
+            printf("after reading we have this: %s\n", static_buf);
             break ;
         }
         static_buf = gnl_join_buffer(static_buf, buffer);
-        printf("readings buf: %s\n", static_buf);
+        printf("joined buf: %s\n", static_buf);
     }
     free(buffer);
     return (static_buf);
@@ -39,16 +39,19 @@ char    *gnl_join_buffer(char *text, char *buffer)
     i = 0;
     j = 0;
 
-    if (!text)
-        joined = (char *)malloc(sizeof(char) * (gnl_strlen(buffer) + 1));
-    else
-        joined = (char *)malloc(sizeof(char) * (gnl_strlen(text) + gnl_strlen(buffer) + 1));
+    joined = (char *)malloc(sizeof(char) * (gnl_strlen(text) + gnl_strlen(buffer)) + 1);
     if (!joined)
         return (NULL);
-    while (text[i++])
+    while (i < gnl_strlen(text))
+    {
         joined[i] = text[i];
-    while (buffer[j++])
+        i++;
+    }
+    while (j < gnl_strlen(buffer))
+    {
         joined[i + j] = buffer[j];
+        j++;
+    }
     joined[i + j] = '\0';
     return (free(text), joined);
 }
@@ -63,35 +66,30 @@ char    *get_next_line(int fd)
     buf = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
     if (!buf)
         return (NULL);
-    printf("we have buffer in gnl\n");
     buf = reading(fd, buf);
     if (!buf)
         return (NULL);
-    printf("%s\n", buf);
     if (gnl_strchr(buf, '\n') == -1)
     {
-        printf("no newline\n");
         output = gnl_strcpy(buf, 0, gnl_strlen(buf));
         return (free(buf), output);
     }
-    output = gnl_strcpy(buf, 0, gnl_strchr(buf, '\n'));
+    output = gnl_strcpy(buf, 0, gnl_strchr(buf, '\n') + 1);
     if (!output)
         return (free(buf), NULL);
-    printf("we have the output line: %s", output);
     buf = gnl_strcpy(buf, gnl_strchr(buf, '\n'), gnl_strlen(buf));
     if (!buf)
         return (free(output), NULL);
     return (output);
 }
-// #include <stdio.h>
-// #include <fcntl.h>
+#include <stdio.h>
+#include <fcntl.h>
 
-// int main()
-// {
-//     char *a;
-//     int fd = open("file.txt", O_RDONLY);
-//    printf("fd: %d\n", fd);
-//     a = get_next_line(fd);
-//         printf("%s", a);
-//     return (0);
-// }
+int main()
+{
+    char *a;
+    int fd = open("file.txt", O_RDONLY);
+    a = get_next_line(fd);
+        printf("%s", a);
+    return (0);
+}
