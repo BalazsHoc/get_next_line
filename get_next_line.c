@@ -9,19 +9,16 @@ char    *reading(int fd, char *static_buf)
     buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (!buffer)
         return (NULL);
-    buffer[BUFFER_SIZE] = '\0';
     return_of_read = read(fd, buffer, BUFFER_SIZE);
-    if (return_of_read == -1)
-        return (ft_free(&buffer), ft_free(&static_buf), NULL);
     while (return_of_read > 0)
     {
+        buffer[return_of_read] = '\0';
         if (gnl_strchr(buffer, '\n') != -1)
         {
             static_buf = gnl_join_buffer(static_buf, buffer);
             return (ft_free(&buffer), static_buf);
         }
         static_buf = gnl_join_buffer(static_buf, buffer);
-        printf("%s\n", static_buf);
         return_of_read = read(fd, buffer, BUFFER_SIZE);
     }
     if (return_of_read == -1)
@@ -83,18 +80,17 @@ char    *get_next_line(int fd)
         return (ft_free(&output), NULL);
     return (output);
 }
+// #include <stdio.h>
+// #include <fcntl.h>
 
-#include <stdio.h>
-#include <fcntl.h>
+// int main()
+// {
+//     int fd = open("file.txt", O_RDONLY);
 
-int main()
-{
-    int fd = open("file.txt", O_RDONLY);
+//     printf("%s", get_next_line(fd));
+//     printf("%s", get_next_line(fd));
+//     printf("%s", get_next_line(fd));
+//     printf("%s", get_next_line(fd));
 
-    printf("%s\n", get_next_line(fd));
-    printf("%s", get_next_line(fd));
-    printf("%s", get_next_line(fd));
-    printf("%s", get_next_line(fd));
-
-    return (0);
-}
+//     return (0);
+// }
