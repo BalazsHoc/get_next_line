@@ -25,20 +25,45 @@ int    gnl_strchr(char *str, int c)
     return (here);
 }
 
-char *gnl_strcpy(char *str, int start, int end)
+char *gnl_strlcpy(char *str, int len)
 {
     char    *copied;
+    int     i;
 
-    if (start > end)
-        return (NULL);
-    copied = (char *)malloc(sizeof(char) * (end - start + 1));
+    i = 0;
+    copied = (char *)malloc(sizeof(char) * (len) + 1);
     if (!copied)
         return (NULL);
-    while (start < end)
+    while (i <= len)
     {
-        copied[start] = str[start];
-        start++;
+        copied[i] = str[i];
+        i++;
     }
-    copied[end + 1] = '\0';
+    copied[len + 1] = '\0';
     return (copied);
+}
+
+char    *gnl_fromnl(char *str)
+{
+    int     i;
+    int     start;
+    int     end;
+    char    *line;
+
+    i = 0;
+    start = gnl_strchr(str, '\n') + 1;
+    end = gnl_strlen(str) + 1;
+    if (start == end)
+        return (free(str), NULL);
+    line = (char *)malloc(sizeof(char) * (end - start) + 1);
+    if (!line)
+        return (NULL);
+    while (start <= end)
+    {
+        line[i] = str[start];
+        start++;
+        i++;
+    }
+    line[start] = '\0';
+    return (free(str), line);
 }

@@ -15,7 +15,9 @@ char    *reading(int fd, char *growing_text);
 
 int     gnl_strlen(char *str);
 int     gnl_strchr(char *str, int c);
-char    *gnl_strcpy(char *str, int start, int end);
+char    *gnl_strlcpy(char *str, int len);
+char    *gnl_fromnl(char *str);
+
 
 
 #endif
