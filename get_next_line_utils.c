@@ -59,8 +59,8 @@ char    *gnl_fromnl(char *str)
 
     i = 0;
     start = gnl_strchr(str, '\n') + 1;
-    end = gnl_strlen(str) + 1;
-    if (start == end)
+    end = gnl_strlen(str);
+    if (start == end || start == -1 || end == 0)
         return (ft_free(&str), NULL);
     line = (char *)malloc(sizeof(char) * (end - start) + 1);
     if (!line)

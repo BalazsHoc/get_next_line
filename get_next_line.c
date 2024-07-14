@@ -76,8 +76,8 @@ char    *get_next_line(int fd)
     if (!output)
         return (ft_free(&buf), NULL);
     buf = gnl_fromnl(buf);
-    if (!buf)
-        return (ft_free(&output), NULL);
+    /*if (!buf)
+        return (ft_free(&output), NULL);*/
     return (output);
 }
 // #include <stdio.h>
