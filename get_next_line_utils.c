@@ -1,76 +1,85 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bhocsak <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/22 08:40:00 by bhocsak           #+#    #+#             */
+/*   Updated: 2024/07/22 08:43:48 by bhocsak          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void    ft_free(char **str)
+void	ft_free(char **str)
 {
-    if (*str)
-        free(*str);
-    *str = NULL;
+	if (str && *str)
+	{
+		free(*str);
+		*str = NULL;
+	}
 }
 
-int  gnl_strlen(char *str)
+int	gnl_strlen(char *str)
 {
-    int  len;
+	int	len;
 
-    len = 0;
-    while (str[len])
-        len++;
-    return (len);
+	len = 0;
+	while (str[len])
+		len++;
+	return (len);
 }
 
-int    gnl_strchr(char *str, int c)
+int	gnl_strchr(char *str, int c)
 {
-    int here;
+	int	here;
 
-    here = 0;
-    while (str[here] != c)
-    {
-        if (!str[here])
-            return (-1);
-        here++;
-    }
-    return (here);
+	here = 0;
+	while (str[here] != c)
+	{
+		if (!str[here])
+			return (-1);
+		here++;
+	}
+	return (here);
 }
 
-char *gnl_strlcpy(char *str, int len)
+char	*gnl_strlcpy(char *str, int len)
 {
-    char    *copied;
-    int     i;
+	char	*copied;
+	int		i;
 
-    i = 0;
-    copied = (char *)malloc(sizeof(char) * (len) + 1);
-    if (!copied)
-        return (NULL);
-    while (i <= len)
-    {
-        copied[i] = str[i];
-        i++;
-    }
-    copied[len + 1] = '\0';
-    return (copied);
+	i = 0;
+	copied = (char *)malloc(sizeof(char) * (len) + 1);
+	if (!copied)
+		return (NULL);
+	while (i < len)
+	{
+		copied[i] = str[i];
+		i++;
+	}
+	copied[len] = '\0';
+	return (copied);
 }
 
-char    *gnl_fromnl(char *str)
+void	gnl_fromnl(char *buf, char *str)
 {
-    int     i;
-    int     start;
-    int     end;
-    char    *line;
+	int		i;
+	int		start;
+	int		end;
 
-    i = 0;
-    start = gnl_strchr(str, '\n') + 1;
-    end = gnl_strlen(str);
-    if (start == end || start == -1 || end == 0)
-        return (ft_free(&str), NULL);
-    line = (char *)malloc(sizeof(char) * (end - start) + 1);
-    if (!line)
-        return (NULL);
-    while (start <= end)
-    {
-        line[i] = str[start];
-        start++;
-        i++;
-    }
-    line[start] = '\0';
-    return (ft_free(&str), line);
+	i = 0;
+	start = gnl_strchr(str, '\n') + 1;
+	end = gnl_strlen(str);
+	if (start == -1 || end == 0)
+		return (ft_free(&str));
+	while (start < end)
+	{
+		buf[i] = str[start];
+		start++;
+		i++;
+	}
+	buf[i] = '\0';
+	ft_free(&str);
 }
