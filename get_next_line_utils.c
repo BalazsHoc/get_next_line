@@ -12,15 +12,6 @@
 
 #include "get_next_line.h"
 
-void	ft_free(char **str)
-{
-	if (str && *str)
-	{
-		free(*str);
-		*str = NULL;
-	}
-}
-
 int	gnl_strlen(char *str)
 {
 	int	len;
@@ -51,7 +42,7 @@ char	*gnl_strlcpy(char *str, int len)
 	int		i;
 
 	i = 0;
-	copied = (char *)malloc(sizeof(char) * (len));
+	copied = (char *)malloc(sizeof(char) * (len) + 1);
 	if (!copied)
 		return (NULL);
 	while (i < len)
@@ -73,7 +64,7 @@ void	gnl_fromnl(char *buf, char *str)
 	start = gnl_strchr(str, '\n') + 1;
 	end = gnl_strlen(str);
 	if (start == -1 || end == 0)
-		return (ft_free(&str));
+		return (free(str));
 	while (start < end)
 	{
 		buf[i] = str[start];
@@ -81,5 +72,17 @@ void	gnl_fromnl(char *buf, char *str)
 		i++;
 	}
 	buf[i] = '\0';
-	ft_free(&str);
+	free(str);
+}
+
+char	*endofile(char *text)
+{
+	char	*output;
+
+	output = gnl_strlcpy(text, gnl_strlen(text));
+	if (!output)
+		return (free(text), NULL);
+	if (output[0] == '\0')
+		return (free(text), free(output), NULL);
+	return (free(text), output);
 }

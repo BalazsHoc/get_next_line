@@ -12,18 +12,6 @@
 
 #include "get_next_line.h"
 
-char	*endofile(char *text)
-{
-	char	*output;
-
-	output = gnl_strlcpy(text, gnl_strlen(text));
-	if (!output)
-		return (ft_free(&text), NULL);
-	if (output[0] == '\0')
-		return (ft_free(&text), ft_free(&output), NULL);
-	return (ft_free(&text), output);
-}
-
 char	*gnl_join_buffer(char *text, char *buffer)
 {
 	char	*joined;
@@ -35,7 +23,7 @@ char	*gnl_join_buffer(char *text, char *buffer)
 	joined = (char *)malloc(sizeof(char) * (gnl_strlen(text)
 				+ gnl_strlen(buffer)) + 1);
 	if (!joined)
-		return (ft_free(&text), NULL);
+		return (free(text), NULL);
 	while (i < gnl_strlen(text))
 	{
 		joined[i] = text[i];
@@ -47,8 +35,9 @@ char	*gnl_join_buffer(char *text, char *buffer)
 		j++;
 	}
 	joined[i + j] = '\0';
-	return (ft_free(&text), joined);
+	return (free(text), joined);
 }
+
 char	*reading(int fd, char *static_buf)
 {
 	char	*buffer;
@@ -71,10 +60,11 @@ char	*reading(int fd, char *static_buf)
 	if (return_of_read == -1)
 	{
 		static_buf[0] = '\0';
-		return (ft_free(&buffer), NULL);
+		return (free(buffer), NULL);
 	}
 	return (buffer);
 }
+
 char	*get_next_line(int fd)
 {
 	static char	buf[BUFFER_SIZE + 1];
@@ -93,18 +83,18 @@ char	*get_next_line(int fd)
 	}
 	output = gnl_strlcpy(text, gnl_strchr(text, '\n') + 1);
 	if (!output)
-		return (ft_free(&text), NULL);
+		return (free(text), NULL);
 	gnl_fromnl(buf, text);
 	return (output);
 }
 // #include <fcntl.h>
+// #include <stdio.h>
 
 // int main()
 // {
-// 	int fd = open("file.txt", O_RDONLY);
-// 	char	*line;
+// 	int fd = open("test.txt", O_RDONLY);
+// 	char *line = get_next_line(fd);
 
-// 	line = get_next_line(fd);
 // 	while (1)
 // 	{
 // 		if (!line)
@@ -113,6 +103,5 @@ char	*get_next_line(int fd)
 // 		free(line);
 // 		line = get_next_line(fd);
 // 	}
-// 	close(fd);
-// 	return (0);
+// 	return 0;
 // }
