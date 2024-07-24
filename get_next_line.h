@@ -27,8 +27,8 @@
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
-char	*gnl_join_buffer(char *text, char *buffer);
 char	*reading(int fd, char *growing_text);
+char	*gnl_join_buffer(char *text, char *buffer);
 char	*endofile(char *text);
 
 void	ft_free(char **str);

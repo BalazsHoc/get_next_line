@@ -24,6 +24,31 @@ char	*endofile(char *text)
 	return (ft_free(&text), output);
 }
 
+char	*gnl_join_buffer(char *text, char *buffer)
+{
+	char	*joined;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	joined = (char *)malloc(sizeof(char) * (gnl_strlen(text)
+				+ gnl_strlen(buffer)) + 1);
+	if (!joined)
+		return (ft_free(&text), NULL);
+	while (i < gnl_strlen(text))
+	{
+		joined[i] = text[i];
+		i++;
+	}
+	while (j < gnl_strlen(buffer))
+	{
+		joined[i + j] = buffer[j];
+		j++;
+	}
+	joined[i + j] = '\0';
+	return (ft_free(&text), joined);
+}
 char	*reading(int fd, char *static_buf)
 {
 	char	*buffer;
@@ -50,33 +75,6 @@ char	*reading(int fd, char *static_buf)
 	}
 	return (buffer);
 }
-
-char	*gnl_join_buffer(char *text, char *buffer)
-{
-	char	*joined;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	joined = (char *)malloc(sizeof(char) * (gnl_strlen(text)
-				+ gnl_strlen(buffer)) + 1);
-	if (!joined)
-		return (ft_free(&text), NULL);
-	while (i < gnl_strlen(text))
-	{
-		joined[i] = text[i];
-		i++;
-	}
-	while (j < gnl_strlen(buffer))
-	{
-		joined[i + j] = buffer[j];
-		j++;
-	}
-	joined[i + j] = '\0';
-	return (ft_free(&text), joined);
-}
-
 char	*get_next_line(int fd)
 {
 	static char	buf[BUFFER_SIZE + 1];
@@ -99,7 +97,6 @@ char	*get_next_line(int fd)
 	gnl_fromnl(buf, text);
 	return (output);
 }
-// #include <stdio.h>
 // #include <fcntl.h>
 
 // int main()
@@ -110,9 +107,9 @@ char	*get_next_line(int fd)
 // 	line = get_next_line(fd);
 // 	while (1)
 // 	{
-// 		printf("line: %s", line);
 // 		if (!line)
 // 			break ;
+// 		printf("%s", line);
 // 		free(line);
 // 		line = get_next_line(fd);
 // 	}

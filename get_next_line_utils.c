@@ -51,7 +51,7 @@ char	*gnl_strlcpy(char *str, int len)
 	int		i;
 
 	i = 0;
-	copied = (char *)malloc(sizeof(char) * (len) + 1);
+	copied = (char *)malloc(sizeof(char) * (len));
 	if (!copied)
 		return (NULL);
 	while (i < len)
