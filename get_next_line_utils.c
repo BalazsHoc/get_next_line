@@ -6,7 +6,7 @@
 /*   By: bhocsak <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 08:40:00 by bhocsak           #+#    #+#             */
-/*   Updated: 2024/07/22 08:43:48 by bhocsak          ###   ########.fr       */
+/*   Updated: 2024/07/28 13:25:19 by bhocsak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,47 @@ int	gnl_strlen(char *str)
 	int	len;
 
 	len = 0;
+	if (!str)
+		return (len);
 	while (str[len])
 		len++;
 	return (len);
 }
 
-int	gnl_strchr(char *str, int c)
+int	gnl_newline(char *str)
 {
-	int	here;
-
-	here = 0;
-	while (str[here] != c)
-	{
-		if (!str[here])
-			return (-1);
-		here++;
-	}
-	return (here);
-}
-
-char	*gnl_strlcpy(char *str, int len)
-{
-	char	*copied;
-	int		i;
+	int	i;
 
 	i = 0;
-	copied = (char *)malloc(sizeof(char) * (len) + 1);
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*gnl_strcpy(char *str)
+{
+	char	*copied;
+	int		len;
+	int		i;
+
+	len = 0;
+	i = 0;
+	while (str[len] && str[len] != '\n')
+		len++;
+	if (str[len] && str[len] == '\n')
+		len++;
+	if (len == 0)
+		return (NULL);
+	copied = (char *)gnl_calloc((len + 1), sizeof(char));
 	if (!copied)
 		return (NULL);
-	while (i < len)
+	while (i < len && str[i] != '\0')
 	{
 		copied[i] = str[i];
 		i++;
@@ -54,35 +66,27 @@ char	*gnl_strlcpy(char *str, int len)
 	return (copied);
 }
 
-void	gnl_fromnl(char *buf, char *str)
+char	*gnl_fromnl(char *str)
 {
 	int		i;
 	int		start;
 	int		end;
+	char	*rest;
 
 	i = 0;
-	start = gnl_strchr(str, '\n') + 1;
-	end = gnl_strlen(str);
-	if (start == -1 || end == 0)
-		return (free(str));
-	while (start < end)
-	{
-		buf[i] = str[start];
+	start = 0;
+	while (str[start] && str[start] != '\n')
 		start++;
-		i++;
-	}
-	buf[i] = '\0';
-	free(str);
-}
-
-char	*endofile(char *text)
-{
-	char	*output;
-
-	output = gnl_strlcpy(text, gnl_strlen(text));
-	if (!output)
-		return (free(text), NULL);
-	if (output[0] == '\0')
-		return (free(text), free(output), NULL);
-	return (free(text), output);
+	if (str[start] && str[start] == '\n')
+		start++;
+	end = gnl_strlen(str);
+	if (start == end || end == 0)
+		return (free(str), NULL);
+	rest = (char *)gnl_calloc((end - start + 1), sizeof(char));
+	if (!rest)
+		return (free(str), NULL);
+	while (start <= end)
+		rest[i++] = str[start++];
+	rest[i] = '\0';
+	return (free(str), rest);
 }
