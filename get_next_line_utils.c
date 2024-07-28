@@ -12,6 +12,15 @@
 
 #include "get_next_line.h"
 
+void	gnl_free(char **ptr)
+{
+	if (ptr != NULL && *ptr != NULL)
+	{
+		free(*ptr);
+		*ptr = NULL;
+	}
+}
+
 int	gnl_strlen(char *str)
 {
 	int	len;
@@ -81,12 +90,12 @@ char	*gnl_fromnl(char *str)
 		start++;
 	end = gnl_strlen(str);
 	if (start == end || end == 0)
-		return (free(str), NULL);
+		return (gnl_free(&str), NULL);
 	rest = (char *)gnl_calloc((end - start + 1), sizeof(char));
 	if (!rest)
-		return (free(str), NULL);
+		return (gnl_free(&str), NULL);
 	while (start <= end)
 		rest[i++] = str[start++];
 	rest[i] = '\0';
-	return (free(str), rest);
+	return (gnl_free(&str), rest);
 }

@@ -6,7 +6,7 @@
 /*   By: bhocsak <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 08:44:18 by bhocsak           #+#    #+#             */
-/*   Updated: 2024/07/28 13:27:02 by bhocsak          ###   ########.fr       */
+/*   Updated: 2024/07/28 14:10:33 by bhocsak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@
 char	*get_next_line(int fd);
 char	*reading(int fd, char *static_buf);
 char	*gnl_join_buffer(char *line, char *buffer);
-char	*gnl_join_free(char	*buffer, char *static_buf, int return_of_read);
+char	*gnl_join_free(char	*buffer, char *static_buf);
 void	*gnl_calloc(size_t nmemb, size_t size);
 
 char	*gnl_fromnl(char *str);
 char	*gnl_strcpy(char *str);
 int		gnl_newline(char *str);
 int		gnl_strlen(char *str);
+void	gnl_free(char **ptr);
 
 #endif
