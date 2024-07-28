@@ -53,7 +53,7 @@ char	*gnl_join_buffer(char *line, char *buffer)
 	int		i;
 	int		j;
 
-	if (!line && !buffer)
+	if (!line || !buffer)
 		return (NULL);
 	joined = (char *)gnl_calloc((gnl_strlen(line)
 				+ gnl_strlen(buffer) + 1), sizeof(char));
@@ -97,6 +97,8 @@ char	*reading(int fd, char *static_buf)
 		static_buf = gnl_join_free(static_buf, buffer);
 		if (!static_buf)
 			return (gnl_free(&buffer), NULL);
+		if (return_of_read < BUFFER_SIZE)
+			break ;
 	}
 	return (static_buf);
 }
@@ -129,14 +131,16 @@ char	*get_next_line(int fd)
 // 	int fd = open("test.txt", O_RDONLY);
 // 	char *line = get_next_line(fd);
 
-// 	while (1)
-// 	{
-// 		printf("line: %s", line);
-// 		if (!line)
-// 			break ;
-// 		free(line);
-// 		line = get_next_line(fd);
-// 	}
+// 	printf("line: x%sx", line);
+// 	// while (1)
+// 	// {
+// 	// 	if (!line)
+// 	// 		break ;
+// 	// 	printf("line: %s", line);
+// 	// 	free(line);
+// 	// 	line = get_next_line(fd);
+// 	// }
+// 	free(line);
 // 	close(fd);
 // 	return 0;
 // }

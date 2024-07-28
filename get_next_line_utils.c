@@ -57,6 +57,8 @@ char	*gnl_strcpy(char *str)
 
 	len = 0;
 	i = 0;
+	if (!str)
+		return (NULL);
 	while (str[len] && str[len] != '\n')
 		len++;
 	if (str[len] && str[len] == '\n')
