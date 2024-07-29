@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdint.h>
+# include <limits.h>
 
 char	*get_next_line(int fd);
 char	*reading(int fd, char *static_buf);

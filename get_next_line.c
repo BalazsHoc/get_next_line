@@ -108,8 +108,8 @@ char	*get_next_line(int fd)
 	static char	*buf;
 	char		*output;
 
-	if (fd < 0 || BUFFER_SIZE < 1)
-		return (NULL);
+	if (fd < 0 || BUFFER_SIZE < 1 || BUFFER_SIZE > INT_MAX)
+		return (gnl_free(&buf), NULL);
 	buf = reading(fd, buf);
 	if (!buf)
 		return (NULL);
