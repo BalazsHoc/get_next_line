@@ -108,7 +108,7 @@ char	*get_next_line(int fd)
 	static char	*buf;
 	char		*output;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || BUFFER_SIZE > INT_MAX)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (gnl_free(&buf), NULL);
 	buf = reading(fd, buf);
 	if (!buf)
@@ -131,16 +131,16 @@ char	*get_next_line(int fd)
 // 	int fd = open("test.txt", O_RDONLY);
 // 	char *line = get_next_line(fd);
 
-// 	printf("line: x%sx", line);
-// 	// while (1)
-// 	// {
-// 	// 	if (!line)
-// 	// 		break ;
-// 	// 	printf("line: %s", line);
-// 	// 	free(line);
-// 	// 	line = get_next_line(fd);
-// 	// }
-// 	free(line);
+// 	//printf("line: x%sx", line);
+// 	while (1)
+// 	{
+// 		if (!line)
+// 			break ;
+// 		printf("line: x%sx", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// 	//free(line);
 // 	close(fd);
 // 	return 0;
 // }
